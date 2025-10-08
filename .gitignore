@@ -1,0 +1,5 @@
+jfc/out
+jfc/dist
+jfc/node_modules
+jfc/.vscode-test/
+jfc/*.vsix
