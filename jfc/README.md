@@ -1,17 +1,87 @@
-# Java Function Classifier
+# Java Function Classifier VS Code Extension
 
-A custom VSCode extension that checks Java functions for security vulnerabilities by sending the code to a Django-based REST API.
+## Overview
+The **Java Function Classifier** is a Visual Studio Code extension designed to analyze and classify Java functions as **Vulnerable** or **Safe**.  
+It integrates seamlessly with a **Django REST API** backend that serves a trained machine learning model for vulnerability detection.  
+
+The extension allows developers to test code snippets directly from the VS Code editor — ideal for integrating AI-powered code security into the development workflow.
+
+---
 
 ## Features
-- Select Java code and run vulnerability analysis
-- Integration with REST API (`/api/predict/`)
-- Displays prediction (`SAFE` / `VULNERABLE`) inside VSCode
+✅ **Code selection & classification** — Select any Java function and classify it instantly.  
+✅ **AI-based vulnerability prediction** — Uses a trained deep learning model deployed on a Django API.  
+✅ **Visual highlighting** —  
+- 🟥 Red background → *Vulnerable code detected*  
+- 🟩 Green background → *Safe code*  
+✅ **Progress loader** — Displays a “Processing…” loader while communicating with the backend.  
+✅ **Seamless integration** — Works directly in the VS Code editor without leaving your coding environment.
 
-## Usage
-1. Run your Django backend: `python manage.py runserver`
-2. In VSCode, open a Java file.
-3. Select code → `Ctrl+Shift+P` → ****.
+---
 
-## Requirements
-- Django backend running locally
-- REST API available at `http://127.0.0.1:8000/api/predict`
+## Architecture
+<img width="894" height="598" alt="image" src="https://github.com/user-attachments/assets/50bfd66e-fb8c-49e3-9213-d77e7c4e14c4" />
+
+**Workflow:**
+1. Developer selects a Java function.  
+2. The extension sends the function to the Django REST API.  
+3. The backend model analyzes it and predicts *VULNERABLE* or *SAFE*.  
+4. The extension highlights the result directly in the editor.
+
+---
+
+## 🚀 Installation
+
+### 1️⃣ Prerequisites
+- [Node.js](https://nodejs.org/) ≥ 18  
+- [Visual Studio Code](https://code.visualstudio.com/)  
+- Django backend running locally (API endpoint: `http://127.0.0.1:8000/api/predict`)
+
+### 2️⃣ Clone this Repository
+```bash
+git clone https://github.com/rougixxx/JFClassifier
+cd JFClassifier
+```
+### 3️⃣ Install Dependencies
+```bash
+npm install
+```
+### 4️⃣ Build the Extension
+```bash
+npm run compile
+```
+### 5️⃣ Run in VS Code
+- Open the extension folder in VS Code
+- Press F5 → a new window “Extension Development Host” will open
+- Open a Java file, select some code, and run the command:
+```bash
+Ctrl + Shift + P → Classify a Function
+```
+## 🧩 Packaging the Extension
+If you want to generate an installable `.vsix` file:
+```bash
+npm install -g vsce
+vsce package # in the folder of the extension
+```
+This create a file like:
+`jfc-0.0.1.vsix`
+
+You can install it locally via:
+```bash
+code --install-extension jfc-0.0.1.vsix 
+```
+## 🧰 Usage Example
+
+Open any .java file in VS Code
+
+Select a function or block of code
+
+Run the “Classify Function” command
+
+The extension sends the code to the Django API and highlights it:
+
+🟥 Vulnerable → Red background
+
+🟩 Safe → Green background
+
+The prediction result also appears in the VS Code notification popup.
