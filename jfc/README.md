@@ -1,6 +1,6 @@
-# Java Function Classifier VS Code Extension
+# 📘 Java Function Classifier VS Code Extension
 
-## Overview
+## 🧠 Overview
 The **Java Function Classifier** is a Visual Studio Code extension designed to analyze and classify Java functions as **Vulnerable** or **Safe**.  
 It integrates seamlessly with a **Django REST API** backend that serves a trained machine learning model for vulnerability detection.  
 
@@ -8,7 +8,7 @@ The extension allows developers to test code snippets directly from the VS Code 
 
 ---
 
-## Features
+## ⚙️ Features
 ✅ **Code selection & classification** — Select any Java function and classify it instantly.  
 ✅ **AI-based vulnerability prediction** — Uses a trained deep learning model deployed on a Django API.  
 ✅ **Visual highlighting** —  
@@ -19,7 +19,7 @@ The extension allows developers to test code snippets directly from the VS Code 
 
 ---
 
-## Architecture
+## 🏗️ Architecture
 <img width="894" height="598" alt="image" src="https://github.com/user-attachments/assets/50bfd66e-fb8c-49e3-9213-d77e7c4e14c4" />
 
 **Workflow:**
@@ -72,16 +72,20 @@ code --install-extension jfc-0.0.1.vsix
 ```
 ## 🧰 Usage Example
 
-Open any .java file in VS Code
+1. Open any `.java` file in VS Code
+2. Select a function or block of code
+3. Run the “Classify a function” command
+4. The extension sends the code to the Django API and highlights it:
 
-Select a function or block of code
+- 🟥 Vulnerable → Red background
 
-Run the “Classify Function” command
-
-The extension sends the code to the Django API and highlights it:
-
-🟥 Vulnerable → Red background
-
-🟩 Safe → Green background
+- 🟩 Safe → Green background
 
 The prediction result also appears in the VS Code notification popup.
+
+<img width="1920" height="612" alt="jfc1" src="https://github.com/user-attachments/assets/f511575e-7373-48d9-aeda-11d88531a3bb" />
+
+<img width="1816" height="660" alt="jfc2" src="https://github.com/user-attachments/assets/cb13f2ca-4d39-4180-9eed-3ea3b922558e" />
+
+## 🧾 License
+MIT License © 2025 — rougixxx
