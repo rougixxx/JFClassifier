@@ -3,3 +3,12 @@ jfc/dist
 jfc/node_modules
 jfc/.vscode-test/
 jfc/*.vsix
+
+# ***** web-app*****
+jfc-web-app/unixcoder_model_special/model.safetensors
+jfc-web-app/prediction-files/java-vuln-detection_v2.keras
+jfc-web-app/prediction-files/java-vuln-detection.keras
+jfc-web-app/prediction-files/unixcoder_model/model.safetensors
+
+# ***** arch-dev ****
+arch-dev/process-scripts/css/unixcoder_model/model.safetensors

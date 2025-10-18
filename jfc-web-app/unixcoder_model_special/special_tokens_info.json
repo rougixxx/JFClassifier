@@ -1,0 +1,12 @@
+{
+  "vocab_size": 51416,
+  "num_special_tokens": 6,
+  "special_tokens": [
+    "<s>",
+    "</s>",
+    "<unk>",
+    "<pad>",
+    "<mask>",
+    "<mask0>"
+  ]
+}

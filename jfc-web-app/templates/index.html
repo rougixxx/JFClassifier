@@ -1,0 +1,164 @@
+{% extends 'assets/base.html' %}
+
+{% block title %}Java Function Classifier - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Classify Your Java Function</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'predict_form' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.java_code.id_for_label }}" class="form-label">
+                            {{ form.java_code.label }}
+                        </label>
+                        {{ form.java_code }}
+                        {% if form.java_code.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.java_code.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="text-center my-3">
+                        <strong>OR</strong>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.java_file.id_for_label }}" class="form-label">
+                            {{ form.java_file.label }}
+                        </label>
+                        {{ form.java_file }}
+                        <div class="form-text">
+                            Upload a .java or .txt file containing a single Java function (max 5MB)
+                        </div>
+                        {% if form.java_file.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.java_file.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-brain"></i> Classify Function
+                    </button>
+                </form>
+            </div>
+        </div>
+  <!-- Progress indicator section -->
+        <div class="card mt-4 d-none" id="progressCard">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="spinner-border spinner-border-sm text-primary me-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div>
+                        <strong>Processing your Java function...</strong>
+                        <div class="small text-muted">This may take a few seconds</div>
+                    </div>
+                </div>
+                <div class="progress mt-3" style="height: 6px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                         role="progressbar" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">Example Java Function</h5>
+            </div>
+            <div class="card-body">
+                <pre><code class="language-java">public static void bubbleSort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Predictions</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_predictions %}
+                    {% for prediction in recent_predictions %}
+                        <div class="mb-3 p-3 border rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong class="text-primary">{{ prediction.prediction }}</strong>
+                                {% if prediction.confidence %}
+                                    <span class="badge bg-success">{{ prediction.confidence|floatformat:1 }}%</span>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">
+                                {{ prediction.timestamp|date:"M d, Y H:i" }}
+                            </small>
+                            <div class="mt-2">
+                                <code class="small">{{ prediction.java_code|truncatechars:50 }}</code>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No predictions yet. Try classifying your first Java function!</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">How It Works</h5>
+            </div>
+            <div class="card-body">
+                <ol class="mb-0">
+                    <li class="mb-2">Enter your Java function code or upload a file</li>
+                    <li class="mb-2">Our ML model analyzes the code structure and patterns</li>
+                    <li class="mb-2">Get instant classification results with confidence scores</li>
+                    <li>View prediction history and insights</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('classifyForm');
+    const progressCard = document.getElementById('progressCard');
+    const submitBtn = document.getElementById('classifyBtn');
+    
+    form.addEventListener('submit', function() {
+        // Show progress card
+        progressCard.classList.remove('d-none');
+        
+        // Scroll to progress card
+        progressCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+});
+</script>
+{% endblock %}
