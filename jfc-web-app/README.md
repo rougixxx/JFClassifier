@@ -32,15 +32,15 @@ This workflow demonstrates how the vulnerability detection model can be seamless
 
 
 ## 📦 Technologies Used
-- **Django** – Web framework for backend and rendering pages  
+- **Django 5.3** – Web framework for backend and rendering pages  
 - **HTML/CSS/Bootstrap** – Frontend interface  
-- **Python** – Backend logic  
+- **Python 3.11** – Backend logic  
 - **Deployed Deep Learning Model** – Classifies Java methods
 
 
 ### 📂 JFC-web-app Structure:
 ```
-├── api-prediction-files
+├── api-prediction-files # the folder used to store the files used for prediction for an API request
 │   ├── ast
 │   │   ├── Sample.java.dot
 │   │   └── Sample.java.dot.txt
@@ -57,17 +57,18 @@ This workflow demonstrates how the vulnerability detection model can be seamless
 │   │   ├── css_matrix.npy
 │   │   └── ddg_matrix.npy
 │   └── Sample.java
-├── ast-generator
-│    
-├── classifier
+
+├── ast-generator # Java code used to generate the AST graph dot files
+
+├── classifier # Main Django application
 │   ├── asgi.py
 │   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── db.sqlite3
+├── db.sqlite3 
 ├── manage.py
-├── predictApp
+├── predictApp # the main app for using the model for code classification
 │   ├── admin.py
 │   ├── apps.py
 │   ├── classifier.py
@@ -75,13 +76,13 @@ This workflow demonstrates how the vulnerability detection model can be seamless
 │   ├── helpers.py
 │   ├── migrations
 │   ├── models.py
-│   ├── mvsa.py
-│   ├── special_tokens_list_all_dataset.txt
+│   ├── mvsa.py # Muli-view self attetnion Encoder code
+│   ├── special_tokens_list_all_dataset.txt # added more vocab to tokenizer
 │   ├── special_tokens_list.txt
 │   ├── tests.py
-│   ├── unixcoder.py
-│   └── views.py
-├── prediction-files
+│   ├── unixcoder.py # interface class to work the unixcoder model
+│   └── views.py # main logic here
+├── prediction-files # Files used for Prediction
 │   ├── ast
 │   │   ├── Sample.java.dot
 │   │   └── Sample.java.dot.txt
@@ -94,16 +95,16 @@ This workflow demonstrates how the vulnerability detection model can be seamless
 │   │   ├── Sample.java.dot
 │   │   └── Sample.java.dot.txt
 │   ├── generate_dot_cfg_ddg.sc
-│   ├── java-vuln-detection.keras
+│   ├── java-vuln-detection.keras # the jfc Trained model
 │   ├── java-vuln-detection_v2.keras
-│   ├── npy-files
+│   ├── npy-files # graph features matrices
 │   │   ├── ast_matrix.npy
 │   │   ├── cfg_matrix.npy
 │   │   ├── css_matrix.npy
 │   │   ├── css.npy
 │   │   └── ddg_matrix.npy
-│   ├── Sample.java
-│   ├── unixcoder_model
+│   ├── Sample.java # the targeted method code
+│   ├── unixcoder_model # the pre-trained transformer model config files
 │   │   ├── added_tokens.json
 │   │   ├── config.json
 │   │   ├── merges.txt
@@ -112,26 +113,76 @@ This workflow demonstrates how the vulnerability detection model can be seamless
 │   │   ├── special_tokens_map.json
 │   │   ├── tokenizer_config.json
 │   │   └── vocab.json
-│   └── vuln.java
 ├── README.md
 ├── requirements.txt
-├── static
+├── static # static bootsrap files
 │   └── assets
 │       ├── bootstrap-5.0.2-dist
 │       ├── css
 │       │   └── bootstrap.min.css
 │       └── js
 │           └── bootstrap.bundle.min.js
-├── templates
+├── templates # HTML templates used for the django-app frontend
 │   ├── assets
 │   │   └── base.html
 │   ├── index.html
 │   └── result_page.html
-└── unixcoder_model_special
-    ├── config.json
-    ├── merges.txt
-    ├── model.safetensors
-    ├── special_tokens_info.json
-    ├── special_tokens_map.json
-    ├── tokenizer_config.json
-    └── vocab.json
+```
+
+### Workflow
+1. User pastes a Java function into the form.
+2. Django backend saves the code and triggers:
+   1. AST generation
+   2. CFG generation
+   3. DDG generation
+   4. CSS encoding with UniXcoder
+3.Features are converted into matrices and fed to the JFC model.
+4. The model outputs: **SAFE** or **VULNERABLE**
+5. User is redirected to a results page displaying the prediction.
+
+### API Usage (Used by the VS Code Extension)
+Endpoint
+```POST /api/predict```
+
+Request Body
+```
+{
+  "code": "public void method() { ... }"
+}
+```
+
+Response
+```
+{
+  "prediction": "SAFE/VULNEABLE",
+}
+```
+### Running the Web App
+1. Create a Python environment and activate it
+```
+python3 -m venv venv
+source venv/bin/activate
+
+```
+2. Install dependencies
+```
+pip install -r requirements.txt
+
+```
+Note: you need to ajdust you requirements file based on your needs and your setup
+
+3. Run migrations
+```
+python manage.py migrate
+
+```
+4. Start server
+```
+python manage.py runserver
+
+```
+the app will  be available at:
+```
+http://127.0.0.1:8000
+
+```
